@@ -5,14 +5,14 @@ const cors = require('cors');
 const path = require('path');
 
 
-
 class Server{
 
     constructor(){
         this.app = express();
         this.port = process.env.PORT || 3000;
         this.paths = {
-            main: '/'
+            main: '/',
+            results: '/results',
         }
 
 
@@ -24,6 +24,10 @@ class Server{
     }
 
     middlewares(){
+        //Parse the body
+        this.app.use(express.urlencoded({extended:true}));
+        this.app.use(express.json());
+
         //Setting view engine
         this.app.engine('hbs', handlebars({
             defaultLayout:false,
@@ -32,6 +36,8 @@ class Server{
         this.app.set('view-engine', 'hbs');
         this.app.set('views', path.join(__dirname,'../','views'));
 
+        //Static css files
+        this.app.use(express.static('public'));
 
         //Cors to the requests
         this.app.use(cors());
@@ -40,6 +46,7 @@ class Server{
 
     routes(){
         this.app.use(this.paths.main, require('../routes/main'))
+        this.app.use(this.paths.results, require('../routes/result'))
 
     }
 

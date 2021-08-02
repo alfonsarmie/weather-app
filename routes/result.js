@@ -1,12 +1,10 @@
 const { Router } = require('express');
+const { resultsApi } = require('../controllers/results');
 
 
 const router = Router();
 
-router.get('/', (req,res) => {
-    res.render('main.hbs')
-
-})
+router.post('/', resultsApi)
 
 
 
